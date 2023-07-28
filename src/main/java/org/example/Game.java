@@ -22,32 +22,46 @@ public class Game {
         dealer.dealInitialCards(humanPlayer, botPlayer, table);
 
         while (!gameOver()) {
-            playTurn(humanPlayer);
+            playTurnHuman();
             if (gameOver()) break;
-            playTurn(botPlayer);
+            playTurnBot();
         }
 
         calculateAndDisplayScores();
     }
 
 
-    private void playTurn(Player player) {
+    private void playTurnHuman() {
         table.displayCurrentTable();
 
-        if (player.isHandEmpty()) {
-            dealer.dealCardsToPlayer(player);
+        if (humanPlayer.isHandEmpty()) {
+            dealer.dealCardsToPlayer(humanPlayer);
         }
 
         dealer.deck().logDeckSize();
 
-        Card playedCard = player.playCard();
+        Card playedCard = humanPlayer.playCard();
 
+        resolveTurn(humanPlayer, playedCard);
+    }
+
+    private void playTurnBot() {
+        if (botPlayer.isHandEmpty()) {
+            dealer.dealCardsToPlayer(botPlayer);
+        }
+
+        Card playedCard = botPlayer.playCard();
+
+        resolveTurn(botPlayer, playedCard);
+    }
+
+    private void resolveTurn(Player player, Card playedCard) {
         if (!table.getFaceUpCards().isEmpty()
                 && (playedCard.equals(table.getFaceUpCards().getLast()) || playedCard.getValue() == Value.JACK)) {
             List<Card> takenCards = table.takeAllCards();
             player.addGainedCards(takenCards);
 
-            // todo: calculate the total points the olayer scored while getting the pile
+            // Calculate the total points the player scored while getting the pile
             if (table.getFaceUpCards().size() == 1) {
                 player.addPoints(10);
                 System.out.println("***Pişti!*** Player " + player + " took the pile and scored extra points!");

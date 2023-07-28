@@ -1,9 +1,18 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BotPlayer extends Player {
+
+    private final List<Card> seenCards = new ArrayList<>(52);
 
     public BotPlayer() {
         super();
+    }
+
+    public void rememberCard(Card card) {
+        seenCards.add(card);
     }
 
     // todo: implement the best move here!
