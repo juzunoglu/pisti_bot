@@ -9,12 +9,11 @@ public class Main {
         game.start();
     }
 
-
     private static Game initializeGameState() {
         Scanner scanner = new Scanner(System.in);
         Deck deck = new Deck();
-        Player human = new HumanPlayer(scanner);
-        Player bot = new HumanPlayer(scanner);
+        var human = new HumanPlayer(scanner);
+        var bot = new BotPlayer();
         Table table = new Table();
 
         Dealer dealer = new Dealer(deck);

@@ -1,27 +1,27 @@
 package org.example;
 
 public class Game {
-    private final Player player1;
-    private final Player player2;
+    private final HumanPlayer humanPlayer;
+    private final BotPlayer botPlayer;
     private final Table table;
     private final Dealer dealer;
 
 
-    public Game(Player player1, Player player2, Dealer dealer,
+    public Game(HumanPlayer humanPlayer, BotPlayer botPlayer, Dealer dealer,
                 Table table) {
-        this.player1 = player1;
-        this.player2 = player2;
+        this.humanPlayer = humanPlayer;
+        this.botPlayer = botPlayer;
         this.dealer = dealer;
         this.table = table;
     }
 
     public void start() {
-        dealer.dealInitialCards(player1, player2, table);
+        dealer.dealInitialCards(humanPlayer, botPlayer, table);
 
         while (!gameOver()) {
-            playTurn(player1);
+            playTurn(humanPlayer);
             if (gameOver()) break;
-            playTurn(player2);
+            playTurn(botPlayer);
         }
 
         // Once the game is over, calculate and display the scores
@@ -36,11 +36,7 @@ public class Game {
             dealer.dealCardsToPlayer(player);
         }
 
-
         Card playedCard = player.playCard();
-
-        // Bot player's turn...
-        System.out.println("Bot player has played a card");
 
         table.addCardFaceUp(playedCard);
 
@@ -52,11 +48,9 @@ public class Game {
 
     private boolean gameOver() {
         // Add game ending condition here.
-        // For example, the game ends when the deck is empty and both players have no cards left.
-        return dealer.deck().isEmpty() && player1.isHandEmpty() && player2.isHandEmpty();
+        return dealer.deck().isEmpty() && humanPlayer.isHandEmpty() && botPlayer.isHandEmpty();
     }
 
     private void calculateAndDisplayScores() {
-        // You would implement this method to calculate the final scores and display them.
     }
 }
