@@ -3,8 +3,8 @@ package org.example;
 public class Dealer {
     private final Deck deck;
 
-    public Dealer() {
-        this.deck = new Deck();
+    public Dealer(Deck deck) {
+        this.deck = deck;
     }
 
     public Deck getDeck() {

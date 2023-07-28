@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Player {
+
     private final LinkedList<Card> hand = new LinkedList<>();
     private int score = 0;
 

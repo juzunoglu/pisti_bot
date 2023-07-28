@@ -24,7 +24,6 @@ public class Deck {
         return cards.isEmpty();
     }
 
-    // Shuffles the cards in the deck
     public void shuffle() {
         Collections.shuffle(cards);
     }

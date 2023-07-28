@@ -7,15 +7,18 @@ public class Game {
     private final Player player2;
     private final Table table;
     private final Dealer dealer;
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
 
 
-    public Game() {
-        player1 = new Player();
-        player2 = new Player();
-        dealer = new Dealer();
-        table = new Table();
+    public Game(Player player1, Player player2, Dealer dealer,
+                Table table, Scanner scanner) {
+        this.player1 = player1;
+        this.player2 = player2;
+        this.dealer = dealer;
+        this.table = table;
+        this.scanner = scanner;
     }
+
     public void start() {
         dealer.dealInitialCards(player1, player2, table);
 
