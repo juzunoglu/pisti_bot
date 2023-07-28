@@ -35,9 +35,8 @@ public abstract class Player {
         return hand.isEmpty();
     }
 
-    public List<Card> addGainedCards(List<Card> cards) {
+    public void addGainedCards(List<Card> cards) {
         gainedCards.addAll(cards);
-        return gainedCards;
     }
 
     public void addPoints(int points) {

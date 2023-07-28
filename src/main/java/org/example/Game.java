@@ -20,6 +20,7 @@ public class Game {
     public void start() {
         dealer.dealInitialCards(humanPlayer, botPlayer, table);
 
+        // todo: should be parametric as to who goes first.
         while (!gameOver()) {
             playTurnHuman();
             if (gameOver()) break;
@@ -54,17 +55,19 @@ public class Game {
         resolveTurn(botPlayer, playedCard);
     }
 
+    // todo: make this more readable.
     private void resolveTurn(Player player, Card playedCard) {
         if (!table.getFaceUpCards().isEmpty()
                 && (playedCard.equals(table.getFaceUpCards().getLast()) || playedCard.getValue() == Value.JACK)) {
-            List<Card> gainedCards = player.addGainedCards(table.getCurrentPile());
-            player.addPoints(gainedCards);
+            player.addGainedCards(table.getCurrentPile());
+            player.addPoints(table.getCurrentPile());
             if (table.getFaceUpCards().size() == 1) {
                 player.addPoints(10);
                 System.out.println("***Pişti!*** Player " + player + " took the pile and scored extra points!");
             } else {
                 System.out.println("Player " + player + " took the pile!");
             }
+            table.removeAllCards();
         } else {
             table.addCardFaceUp(playedCard);
         }
