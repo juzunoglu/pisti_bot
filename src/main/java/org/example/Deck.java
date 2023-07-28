@@ -20,15 +20,15 @@ public class Deck {
         return cards.pop();
     }
 
+    public LinkedList<Card> getCards() {
+        return cards;
+    }
+
     public boolean isEmpty() {
         return cards.isEmpty();
     }
 
     public void shuffle() {
         Collections.shuffle(cards);
-    }
-
-    public void logDeckSize() {
-        System.out.println("Remaining deck size: " + this.cards.size());
     }
 }

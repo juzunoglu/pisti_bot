@@ -43,13 +43,15 @@ public abstract class Player {
         score += points;
     }
 
-    public void addPoints(List<Card> gainedCards) {
+    protected void addPoints(List<Card> gainedCards) {
         int points = gainedCards.stream()
                 .mapToInt(Card::getPoints)
                 .sum();
 
         this.score += points;
     }
+
+    public abstract void logHand();
 
     public abstract Card playCard();
 

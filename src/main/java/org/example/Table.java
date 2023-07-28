@@ -27,7 +27,7 @@ public class Table {
     }
 
     public void displayCurrentTable() {
-        System.out.println("Current table state");
+        System.out.println("Current table state: " + this.getCurrentPile());
         if (faceUpCards.isEmpty()) {
             System.out.println("No face-up cards on table.");
         } else {

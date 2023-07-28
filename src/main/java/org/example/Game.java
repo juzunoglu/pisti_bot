@@ -1,7 +1,5 @@
 package org.example;
 
-import java.util.List;
-
 public class Game {
 
     private final HumanPlayer humanPlayer;
@@ -21,13 +19,13 @@ public class Game {
         dealer.dealInitialCards(humanPlayer, botPlayer, table);
 
         // todo: should be parametric as to who goes first.
-        while (!gameOver()) {
+        while (gameInProgress()) {
             playTurnHuman();
             if (gameOver()) break;
             playTurnBot();
         }
-
-        calculateAndDisplayScores();
+        assignExtraPointsForMostGainedCards();
+        determineWinner();
     }
 
 
@@ -38,7 +36,7 @@ public class Game {
             dealer.dealCardsToPlayer(humanPlayer);
         }
 
-        dealer.deck().logDeckSize();
+        dealer.logDeckSize();
 
         Card playedCard = humanPlayer.playCard();
 
@@ -61,7 +59,7 @@ public class Game {
                 && (playedCard.equals(table.getFaceUpCards().getLast()) || playedCard.getValue() == Value.JACK)) {
             player.addGainedCards(table.getCurrentPile());
             player.addPoints(table.getCurrentPile());
-            if (table.getFaceUpCards().size() == 1) {
+            if (table.getCurrentPile().size() == 1) {
                 player.addPoints(10);
                 System.out.println("***Pişti!*** Player " + player + " took the pile and scored extra points!");
             } else {
@@ -77,11 +75,14 @@ public class Game {
         return dealer.deck().isEmpty() && humanPlayer.isHandEmpty() && botPlayer.isHandEmpty();
     }
 
-    private void calculateAndDisplayScores() {
+    private boolean gameInProgress() {
+        return !(dealer.deck().isEmpty() && humanPlayer.isHandEmpty() && botPlayer.isHandEmpty());
+    }
+
+    private void determineWinner() {
         System.out.println("Score for human player: " + humanPlayer.getScore());
         System.out.println("Score for botPlayer: " + botPlayer.getScore());
 
-        assignExtraPointsForMostGainedCards();
         if (humanPlayer.getScore() > botPlayer.getScore()) {
             System.out.println("Human win");
             return;
