@@ -17,17 +17,13 @@ public class Table {
         faceUpCards.add(card);
     }
 
-    public void display() {
-        if (!faceUpCards.isEmpty()) {
-            System.out.println("Top card on table: " + faceUpCards.peek());
-        } else {
+    public void displayCurrentTable() {
+        System.out.println("Current table state");
+        if (faceUpCards.isEmpty()) {
             System.out.println("No face-up cards on table.");
+        } else {
+            System.out.println("Top card on table: " + faceUpCards.getLast());
         }
-    }
-
-    // Returns the last face-up card on the table, or null if there are no face-up cards
-    public Card getLastFaceUpCard() {
-        return faceUpCards.isEmpty() ? null : faceUpCards.getLast();
     }
 
     // Removes all cards (both face-up and face-down) from the table
@@ -37,10 +33,5 @@ public class Table {
         faceDownCards.clear();
         faceUpCards.clear();
         return allCards;
-    }
-
-    // Returns the number of face-up cards on the table
-    public int countFaceUpCards() {
-        return faceUpCards.size();
     }
 }

@@ -1,15 +1,6 @@
 package org.example;
 
-public class Dealer {
-    private final Deck deck;
-
-    public Dealer(Deck deck) {
-        this.deck = deck;
-    }
-
-    public Deck getDeck() {
-        return deck;
-    }
+public record Dealer(Deck deck) {
 
     // Deals the initial cards to each player and the table
     public void dealInitialCards(Player player1, Player player2, Table table) {
@@ -18,8 +9,8 @@ public class Dealer {
 
         // Deal 4 cards to each player
         for (int i = 0; i < 4; i++) {
-            player1.addCard(deck.draw());
-            player2.addCard(deck.draw());
+            player1.addToHand(deck.draw());
+            player2.addToHand(deck.draw());
         }
 
         // Place 3 cards face down on the table
@@ -35,7 +26,7 @@ public class Dealer {
     public void dealCardsToPlayer(Player player) {
         if (player.isHandEmpty() && !deck.isEmpty()) {
             for (int i = 0; i < 4; i++) {
-                player.addCard(deck.draw());
+                player.addToHand(deck.draw());
             }
         }
     }

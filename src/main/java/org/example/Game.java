@@ -1,22 +1,18 @@
 package org.example;
 
-import java.util.Scanner;
-
 public class Game {
     private final Player player1;
     private final Player player2;
     private final Table table;
     private final Dealer dealer;
-    private final Scanner scanner;
 
 
     public Game(Player player1, Player player2, Dealer dealer,
-                Table table, Scanner scanner) {
+                Table table) {
         this.player1 = player1;
         this.player2 = player2;
         this.dealer = dealer;
         this.table = table;
-        this.scanner = scanner;
     }
 
     public void start() {
@@ -33,61 +29,31 @@ public class Game {
     }
 
 
-    private Card getPlayerInput() {
-        System.out.println("Enter the number corresponding to the suit of the card you want to play:");
-        for (int i = 0; i < Suit.values().length; i++) {
-            System.out.println(i + ": " + Suit.values()[i]);
-        }
-        int suitIndex = scanner.nextInt();
-
-        System.out.println("Enter the number corresponding to the value of the card you want to play:");
-        for (int i = 0; i < Value.values().length; i++) {
-            System.out.println(i + ": " + Value.values()[i]);
-        }
-        int valueIndex = scanner.nextInt();
-
-        return new Card(Suit.values()[suitIndex], Value.values()[valueIndex]);
-    }
-
     private void playTurn(Player player) {
-        // Displaying the table state
-        System.out.println("Current table state: ");
-        table.display();
-
+        table.displayCurrentTable();
 
         if (player.isHandEmpty()) {
             dealer.dealCardsToPlayer(player);
         }
 
-        // Displaying player's hand
-        System.out.println("Your hand: ");
-        player.displayHand();
 
-        Card playedCard = null;
+        Card playedCard = player.playCard();
 
-        if (player.equals(player1)) {
-            boolean validCardPlayed = false;
-            while (!validCardPlayed) {
-                try {
-                    Card selectedCard = getPlayerInput();
-                    playedCard = player.playCard(selectedCard);
-                    validCardPlayed = true;
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Card not in hand. Please try again.");
-                }
-            }
-        } else {
-            // Bot player's turn...
-            System.out.println("Robot will play here");
-        }
+        // Bot player's turn...
+        System.out.println("Bot player has played a card");
 
         table.addCardFaceUp(playedCard);
+
+        // Add rules to handle special cards and scoring here.
+        // For example, if the played card matches the last face up card on the table,
+        // player gets the pile, etc.
     }
+
 
     private boolean gameOver() {
         // Add game ending condition here.
         // For example, the game ends when the deck is empty and both players have no cards left.
-        return dealer.getDeck().isEmpty() && player1.isHandEmpty() && player2.isHandEmpty();
+        return dealer.deck().isEmpty() && player1.isHandEmpty() && player2.isHandEmpty();
     }
 
     private void calculateAndDisplayScores() {
