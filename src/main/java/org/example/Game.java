@@ -9,7 +9,6 @@ public class Game {
     private final Table table;
     private final Dealer dealer;
 
-
     public Game(HumanPlayer humanPlayer, BotPlayer botPlayer, Dealer dealer,
                 Table table) {
         this.humanPlayer = humanPlayer;
@@ -58,10 +57,8 @@ public class Game {
     private void resolveTurn(Player player, Card playedCard) {
         if (!table.getFaceUpCards().isEmpty()
                 && (playedCard.equals(table.getFaceUpCards().getLast()) || playedCard.getValue() == Value.JACK)) {
-            List<Card> takenCards = table.takeAllCards();
-            player.addGainedCards(takenCards);
-
-            // Calculate the total points the player scored while getting the pile
+            List<Card> gainedCards = player.addGainedCards(table.getCurrentPile());
+            player.addPoints(gainedCards);
             if (table.getFaceUpCards().size() == 1) {
                 player.addPoints(10);
                 System.out.println("***Pişti!*** Player " + player + " took the pile and scored extra points!");
@@ -78,5 +75,25 @@ public class Game {
     }
 
     private void calculateAndDisplayScores() {
+        System.out.println("Score for human player: " + humanPlayer.getScore());
+        System.out.println("Score for botPlayer: " + botPlayer.getScore());
+
+        assignExtraPointsForMostGainedCards();
+        if (humanPlayer.getScore() > botPlayer.getScore()) {
+            System.out.println("Human win");
+            return;
+        }
+        System.out.println("Bot win");
+    }
+
+    public void assignExtraPointsForMostGainedCards() {
+        int player1GainedCards = humanPlayer.getGainedCards().size();
+        int player2GainedCards = botPlayer.getGainedCards().size();
+
+        if (player1GainedCards > player2GainedCards) {
+            humanPlayer.addPoints(3);
+        } else if (player2GainedCards > player1GainedCards) {
+            botPlayer.addPoints(3);
+        }
     }
 }

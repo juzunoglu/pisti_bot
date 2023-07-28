@@ -15,6 +15,10 @@ public class BotPlayer extends Player {
         seenCards.add(card);
     }
 
+    public List<Card> getSeenCards() {
+        return seenCards;
+    }
+
     // todo: implement the best move here!
     @Override
     public Card playCard() {

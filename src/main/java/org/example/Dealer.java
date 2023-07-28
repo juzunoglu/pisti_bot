@@ -3,14 +3,14 @@ package org.example;
 public record Dealer(Deck deck) {
 
     // Deals the initial cards to each player and the table
-    public void dealInitialCards(Player player1, Player player2, Table table) {
+    public void dealInitialCards(HumanPlayer humanPlayer, BotPlayer botPlayer, Table table) {
         // Shuffle the deck before dealing
         deck.shuffle();
 
         // Deal 4 cards to each player
         for (int i = 0; i < 4; i++) {
-            player1.addToHand(deck.draw());
-            player2.addToHand(deck.draw());
+            humanPlayer.addToHand(deck.draw());
+            botPlayer.addToHand(deck.draw());
         }
 
         // Place 3 cards face down on the table

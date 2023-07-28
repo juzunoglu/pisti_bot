@@ -41,7 +41,7 @@ public class Table {
         faceUpCards.clear();
     }
 
-    public List<Card> takeAllCards() {
+    public List<Card> getCurrentPile() {
         List<Card> allCards = new LinkedList<>(faceDownCards);
         allCards.addAll(faceUpCards);
         return allCards;
