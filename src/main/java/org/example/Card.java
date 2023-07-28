@@ -24,9 +24,6 @@ public class Card {
         }
     }
 
-    public Suit getSuit() {
-        return this.suit;
-    }
 
     public Value getValue() {
         return this.value;

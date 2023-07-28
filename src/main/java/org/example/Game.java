@@ -56,7 +56,8 @@ public class Game {
     // todo: make this more readable.
     private void resolveTurn(Player player, Card playedCard) {
         if (!table.getFaceUpCards().isEmpty()
-                && (playedCard.equals(table.getFaceUpCards().getLast()) || playedCard.getValue() == Value.JACK)) {
+                && (playedCard.getValue().equals(table.getFaceUpCards().getLast().getValue())
+                || playedCard.getValue() == Value.JACK)) {
             player.addGainedCards(table.getCurrentPile());
             player.addPoints(table.getCurrentPile());
             if (table.getCurrentPile().size() == 1) {

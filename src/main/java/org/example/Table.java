@@ -16,12 +16,10 @@ public class Table {
         return faceUpCards;
     }
 
-    // Adds a card to the pile of face-down cards on the table
     public void addCardFaceDown(Card card) {
         faceDownCards.add(card);
     }
 
-    // Adds a card to the pile of face-up cards on the table
     public void addCardFaceUp(Card card) {
         faceUpCards.add(card);
     }
@@ -35,7 +33,6 @@ public class Table {
         }
     }
 
-    // Removes all cards (both face-up and face-down) from the table
     public void removeAllCards() {
         faceDownCards.clear();
         faceUpCards.clear();
