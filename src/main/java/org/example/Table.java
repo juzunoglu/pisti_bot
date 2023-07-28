@@ -7,6 +7,15 @@ public class Table {
     private final LinkedList<Card> faceDownCards = new LinkedList<>();
     private final LinkedList<Card> faceUpCards = new LinkedList<>();
 
+
+    public LinkedList<Card> getFaceDownCards() {
+        return faceDownCards;
+    }
+
+    public LinkedList<Card> getFaceUpCards() {
+        return faceUpCards;
+    }
+
     // Adds a card to the pile of face-down cards on the table
     public void addCardFaceDown(Card card) {
         faceDownCards.add(card);
@@ -27,11 +36,14 @@ public class Table {
     }
 
     // Removes all cards (both face-up and face-down) from the table
-    public List<Card> removeAllCards() {
-        List<Card> allCards = new LinkedList<>(faceDownCards);
-        allCards.addAll(faceUpCards);
+    public void removeAllCards() {
         faceDownCards.clear();
         faceUpCards.clear();
+    }
+
+    public List<Card> takeAllCards() {
+        List<Card> allCards = new LinkedList<>(faceDownCards);
+        allCards.addAll(faceUpCards);
         return allCards;
     }
 }

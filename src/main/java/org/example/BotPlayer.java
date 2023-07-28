@@ -6,6 +6,7 @@ public class BotPlayer extends Player {
         super();
     }
 
+    // todo: implement the best move here!
     @Override
     public Card playCard() {
         Card card = new Card(Suit.SPADES, Value.EIGHT);

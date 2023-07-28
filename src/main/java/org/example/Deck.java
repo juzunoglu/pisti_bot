@@ -27,4 +27,8 @@ public class Deck {
     public void shuffle() {
         Collections.shuffle(cards);
     }
+
+    public void logDeckSize() {
+        System.out.println("Remaining deck size: " + this.cards.size());
+    }
 }
