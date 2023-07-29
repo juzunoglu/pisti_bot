@@ -62,25 +62,42 @@ public class Game {
 
     // todo: make this more readable.
     private void resolveTurn(Player player, Card playedCard) {
-
         botPlayer.rememberCard(playedCard);
         botPlayer.logSeenCards();
 
-        if (!table.getFaceUpCards().isEmpty()
-                && (playedCard.getValue().equals(table.getFaceUpCards().getLast().getValue())
-                || playedCard.getValue() == Value.JACK)) {
+        if (isTableEmpty()) {
+            table.addCardFaceUp(playedCard);
+        } else if (isMatchingCard(playedCard) || isJack(playedCard)) {
             player.addGainedCards(table.getCurrentPile());
             player.addPoints(table.getCurrentPile());
-             // todo: pitşi logic'i hatalı. düzelt.
-            if (table.getCurrentPile().size() == 1) {
-                player.addPoints(10);
-                System.out.println("***Pişti!*** Player " + player + " took the pile and scored extra points!");
-            } else {
-                System.out.println("Player " + player + " took the pile!");
-            }
+            checkAndHandlePisti(player, playedCard);
             table.removeAllCards();
         } else {
             table.addCardFaceUp(playedCard);
+        }
+    }
+
+    private boolean isTableEmpty() {
+        return table.getFaceUpCards().isEmpty();
+    }
+
+    private boolean isMatchingCard(Card playedCard) {
+        return playedCard.getValue().equals(table.getFaceUpCards().getLast().getValue());
+    }
+
+    private boolean isJack(Card playedCard) {
+        return playedCard.getValue() == Value.JACK;
+    }
+
+    private void checkAndHandlePisti(Player player, Card playedCard) {
+        if (table.getCurrentPile().size() == 1 && !isJack(playedCard) && !isJack(table.getPileTopCard().get())) {
+            player.addPoints(10);
+            System.out.println("***Pişti!*** Player " + player + " took the pile and scored extra points!");
+        } else if (table.getCurrentPile().size() == 1 && isJack(playedCard) && isJack(table.getPileTopCard().get())) {
+            player.addPoints(20);
+            System.out.println("***Pişti!*** Player " + player + " took the pile with a Jack and scored extra points!");
+        } else {
+            System.out.println("Player " + player + " took the pile without a pişti!");
         }
     }
 

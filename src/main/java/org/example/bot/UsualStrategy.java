@@ -4,39 +4,50 @@ import org.example.Card;
 import org.example.Table;
 import org.example.Value;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class UsualStrategy extends CommonStrategy {
 
+    private static final int PILE_THRESHOLD = 2;
+
     @Override
     public Card chooseCard(BotPlayer bot, Table table) {
-        Optional<Card> matchingCard = this.getMatchingCard(bot, table);
-        if (matchingCard.isPresent()) {
-            return matchingCard.get();
-        }
+        return getMatchingCard(bot, table)
+                .or(() -> playJackIfAppropriate(bot, table))
+                .or(() -> chooseCardByFrequency(bot))
+                .orElseGet(() -> playRandomCard(bot));
+    }
 
-        // If pile's size is greater than 2 and bot has "J", play "J"
-        if (table.getCurrentPile().size() > 2 && bot.isJInHand()) {
-            for (Card cardInHand : bot.getHand()) {
-                if (cardInHand.getValue() == Value.JACK) {
-                    return cardInHand;
-                }
-            }
+    private Optional<Card> playJackIfAppropriate(BotPlayer bot, Table table) {
+        if (shouldPlayJack(table) && bot.getHand().size() > 1) {
+            return bot.getJackInHand();
         }
+        return Optional.empty();
+    }
 
-        // If no matching card, use seen card frequency strategy
+    private Optional<Card> chooseCardByFrequency(BotPlayer bot) {
         Map<Value, Integer> seenCardsFrequency = bot.getSeenCardsFrequency();
-        for (int i = 3; i > 0; i--) {
-            for (Card cardInHand : bot.getHand()) {
-                if (seenCardsFrequency.getOrDefault(cardInHand.getValue(), 0) == i) {
-                    return cardInHand;
-                }
-            }
-        }
+        return IntStream.rangeClosed(1, 3)
+                .boxed()
+                .sorted(Collections.reverseOrder())
+                .flatMap(i -> bot.getHand().stream()
+                        .filter(card -> !isJack(card)) // Do not consider "J" in this strategy
+                        .filter(card -> Objects.equals(seenCardsFrequency.getOrDefault(card.getValue(), 0), i)))
+                .findFirst();
+    }
 
-        // If no card has been seen 3, 2, or 1 times and no J in hand, play a random card
+    private Card playRandomCard(BotPlayer bot) {
         return bot.getHand().get(new Random().nextInt(bot.getHand().size()));
     }
+
+
+    private boolean shouldPlayJack(Table table) {
+        return table.getCurrentPile().size() > PILE_THRESHOLD;
+    }
+
+    private boolean isJack(Card card) {
+        return card.getValue() == Value.JACK;
+    }
+
 }

@@ -7,6 +7,7 @@ import org.example.Value;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class BotPlayer extends Player {
 
@@ -45,13 +46,10 @@ public class BotPlayer extends Player {
         System.out.println("Bot memory : " + seenCardsFrequency);
     }
 
-    public boolean isJInHand() {
-        for (Card cardInHand : getHand()) {
-            if (cardInHand.getValue() == Value.JACK) {
-                return true;
-            }
-        }
-        return false;
+    public Optional<Card> getJackInHand() {
+        return this.getHand().stream()
+                .filter(card -> card.getValue() == Value.JACK)
+                .findFirst();
     }
 
     @Override
