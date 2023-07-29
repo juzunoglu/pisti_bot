@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.bot.BotPlayer;
+
 public class Game {
 
     private final HumanPlayer humanPlayer;
@@ -69,6 +71,7 @@ public class Game {
                 || playedCard.getValue() == Value.JACK)) {
             player.addGainedCards(table.getCurrentPile());
             player.addPoints(table.getCurrentPile());
+             // todo: pitşi logic'i hatalı. düzelt.
             if (table.getCurrentPile().size() == 1) {
                 player.addPoints(10);
                 System.out.println("***Pişti!*** Player " + player + " took the pile and scored extra points!");

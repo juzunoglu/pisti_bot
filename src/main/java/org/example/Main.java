@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.bot.BotPlayer;
+import org.example.bot.UsualStrategy;
+
 import java.util.Scanner;
 
 public class Main {
@@ -13,8 +16,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Deck deck = new Deck();
         var human = new HumanPlayer(scanner);
-        var bot = new BotPlayer();
         Table table = new Table();
+        var bot = new BotPlayer(new UsualStrategy(), table);
 
         Dealer dealer = new Dealer(deck);
         return new Game(human, bot, dealer, table);

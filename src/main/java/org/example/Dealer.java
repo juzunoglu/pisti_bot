@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.bot.BotPlayer;
+
 public record Dealer(Deck deck) {
 
     public void dealInitialCards(HumanPlayer humanPlayer, BotPlayer botPlayer, Table table) {
