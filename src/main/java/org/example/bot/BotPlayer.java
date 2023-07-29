@@ -1,9 +1,6 @@
 package org.example.bot;
 
-import org.example.Card;
-import org.example.Player;
-import org.example.Table;
-import org.example.Value;
+import org.example.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,12 +11,13 @@ public class BotPlayer extends Player {
     private final Map<Value, Integer> seenCardsFrequency = new HashMap<>(52);
     private BotStrategy strategy;
     private final Table table;
+    private final Scoreboard scoreboard;
 
-    public BotPlayer(BotStrategy strategy, Table table) {
+    public BotPlayer(BotStrategy strategy, Table table, Scoreboard scoreboard) {
         super();
         this.strategy = strategy;
         this.table = table;
-
+        this.scoreboard = scoreboard;
     }
 
     public Map<Value, Integer> getSeenCardsFrequency() {
@@ -67,5 +65,12 @@ public class BotPlayer extends Player {
         for (int i = 0; i < this.getHand().size(); i++) {
             System.out.println((i + 1) + ": " + this.getHand().get(i));
         }
+    }
+
+    @Override
+    public String toString() {
+        return "BotPlayer{" +
+                "gainedCards=" + gainedCards +
+                '}';
     }
 }

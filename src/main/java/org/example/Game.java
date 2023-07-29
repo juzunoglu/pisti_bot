@@ -4,17 +4,22 @@ import org.example.bot.BotPlayer;
 
 public class Game {
 
+    public static final int NORMAL_PISTI_SCORE = 10;
+    public static final int PISTI_WITH_JACK_SCORE = 20;
     private final HumanPlayer humanPlayer;
     private final BotPlayer botPlayer;
     private final Table table;
     private final Dealer dealer;
 
+    private final Scoreboard scoreboard;
+
     public Game(HumanPlayer humanPlayer, BotPlayer botPlayer, Dealer dealer,
-                Table table) {
+                Table table, Scoreboard scoreboard) {
         this.humanPlayer = humanPlayer;
         this.botPlayer = botPlayer;
         this.dealer = dealer;
         this.table = table;
+        this.scoreboard = scoreboard;
     }
 
     public void start() {
@@ -69,7 +74,8 @@ public class Game {
             table.addCardFaceUp(playedCard);
         } else if (isMatchingCard(playedCard) || isJack(playedCard)) {
             player.addGainedCards(table.getCurrentPile());
-            player.addPoints(table.getCurrentPile());
+            int pointsFromCards = player.getPointsFromCards(table.getCurrentPile());
+            scoreboard.addScore(player, pointsFromCards);
             checkAndHandlePisti(player, playedCard);
             table.removeAllCards();
         } else {
@@ -91,10 +97,10 @@ public class Game {
 
     private void checkAndHandlePisti(Player player, Card playedCard) {
         if (table.getCurrentPile().size() == 1 && !isJack(playedCard) && !isJack(table.getPileTopCard().get())) {
-            player.addPoints(10);
+            scoreboard.addScore(player, NORMAL_PISTI_SCORE);
             System.out.println("***Pişti!*** Player " + player + " took the pile and scored extra points!");
         } else if (table.getCurrentPile().size() == 1 && isJack(playedCard) && isJack(table.getPileTopCard().get())) {
-            player.addPoints(20);
+            scoreboard.addScore(player, PISTI_WITH_JACK_SCORE);
             System.out.println("***Pişti!*** Player " + player + " took the pile with a Jack and scored extra points!");
         } else {
             System.out.println("Player " + player + " took the pile without a pişti!");
@@ -110,24 +116,27 @@ public class Game {
     }
 
     private void determineWinner() {
-        System.out.println("Score for human player: " + humanPlayer.getScore());
-        System.out.println("Score for botPlayer: " + botPlayer.getScore());
+        System.out.println("Score for human player: " + scoreboard.getScore(humanPlayer));
+        System.out.println("Score for botPlayer: " + scoreboard.getScore(botPlayer));
 
-        if (humanPlayer.getScore() > botPlayer.getScore()) {
+        System.out.println("Scoreboard: " + scoreboard);
+        if (scoreboard.getScore(humanPlayer) > scoreboard.getScore(botPlayer)) {
             System.out.println("Human win");
-            return;
+        } else if (scoreboard.getScore(botPlayer) > scoreboard.getScore(humanPlayer)) {
+            System.out.println("Bot win");
+        } else {
+            System.out.println("It's a draw");
         }
-        System.out.println("Bot win");
     }
 
     public void assignExtraPointsForMostGainedCards() {
-        int player1GainedCards = humanPlayer.getGainedCards().size();
-        int player2GainedCards = botPlayer.getGainedCards().size();
+        int player = humanPlayer.getGainedCards().size();
+        int bot = botPlayer.getGainedCards().size();
 
-        if (player1GainedCards > player2GainedCards) {
-            humanPlayer.addPoints(3);
-        } else if (player2GainedCards > player1GainedCards) {
-            botPlayer.addPoints(3);
+        if (player > bot) {
+            scoreboard.addScore(humanPlayer, 3);
+        } else if (bot > player) {
+            scoreboard.addScore(botPlayer, 3);
         }
     }
 }

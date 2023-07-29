@@ -45,4 +45,10 @@ public class HumanPlayer extends Player {
         return getHand().get(cardIndex);
     }
 
+    @Override
+    public String toString() {
+        return "HumanPlayer{" +
+                "gainedCards=" + gainedCards +
+                '}';
+    }
 }

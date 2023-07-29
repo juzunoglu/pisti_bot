@@ -7,20 +7,13 @@ public abstract class Player {
 
     protected List<Card> hand;
     protected List<Card> gainedCards;
-    protected int score;
-
     public Player() {
         this.hand = new LinkedList<>();
         this.gainedCards = new LinkedList<>();
-        this.score = 0;
     }
 
     public List<Card> getGainedCards() {
         return this.gainedCards;
-    }
-
-    public int getScore() {
-        return score;
     }
 
     public void addToHand(Card card) {
@@ -39,28 +32,14 @@ public abstract class Player {
         gainedCards.addAll(cards);
     }
 
-    public void addPoints(int points) {
-        score += points;
-    }
 
-    protected void addPoints(List<Card> gainedCards) {
-        int points = gainedCards.stream()
+    protected int getPointsFromCards(List<Card> gainedCards) {
+        return gainedCards.stream()
                 .mapToInt(Card::getPoints)
                 .sum();
-
-        this.score += points;
     }
 
     public abstract void logHand();
 
     public abstract Card playCard();
-
-    @Override
-    public String toString() {
-        return "Player{" +
-                "hand=" + hand +
-                ", gained=" + gainedCards +
-                ", score=" + score +
-                '}';
-    }
 }
