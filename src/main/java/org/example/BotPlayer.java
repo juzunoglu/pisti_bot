@@ -1,29 +1,48 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class BotPlayer extends Player {
 
-    private final List<Card> seenCards = new ArrayList<>(52);
+    private final Map<Value, Integer> seenCardsFrequency = new HashMap<>(52);
 
     public BotPlayer() {
         super();
     }
 
     public void rememberCard(Card card) {
-        seenCards.add(card);
+        seenCardsFrequency.put(card.getValue(), seenCardsFrequency.getOrDefault(card.getValue(), 0) + 1);
     }
 
-    public List<Card> getSeenCards() {
-        return seenCards;
+    public void logSeenCards() {
+        System.out.println("Bot memory : " + seenCardsFrequency);
     }
 
-    // todo: always plays the first card.
     @Override
     public Card playCard() {
         logHand();
-        Card selectedCard = this.getHand().get(1);
+
+        // Look for a card in the hand that has been seen 3, 2, or 1 times.
+        Card selectedCard = null;
+        for (int i = 3; i > 0; i--) {
+            for (Card cardInHand : this.getHand()) {
+                if (seenCardsFrequency.getOrDefault(cardInHand.getValue(), 0) == i) {
+                    selectedCard = cardInHand;
+                    break;
+                }
+            }
+            if (selectedCard != null) {
+                break;
+            }
+        }
+
+        // If no card has been seen 3, 2, or 1 times, play a random card.
+        if (selectedCard == null) {
+            selectedCard = this.getHand().get(new Random().nextInt(this.getHand().size()));
+        }
+
         System.out.println("Bot move: " + selectedCard);
         this.getHand().remove(selectedCard);
         return selectedCard;

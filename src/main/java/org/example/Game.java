@@ -30,6 +30,8 @@ public class Game {
 
 
     private void playTurnHuman() {
+
+        System.out.println("*********************Human Player Turn*****************");
         table.displayCurrentTable();
 
         if (humanPlayer.isHandEmpty()) {
@@ -44,6 +46,9 @@ public class Game {
     }
 
     private void playTurnBot() {
+        System.out.println("*********************Bot Player Turn*****************");
+        table.displayCurrentTable();
+
         if (botPlayer.isHandEmpty()) {
             dealer.dealCardsToPlayer(botPlayer);
         }
@@ -55,6 +60,10 @@ public class Game {
 
     // todo: make this more readable.
     private void resolveTurn(Player player, Card playedCard) {
+
+        botPlayer.rememberCard(playedCard);
+        botPlayer.logSeenCards();
+
         if (!table.getFaceUpCards().isEmpty()
                 && (playedCard.getValue().equals(table.getFaceUpCards().getLast().getValue())
                 || playedCard.getValue() == Value.JACK)) {
