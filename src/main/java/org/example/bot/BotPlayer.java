@@ -11,25 +11,32 @@ public class BotPlayer extends Player {
     private final Map<Value, Integer> seenCardsFrequency = new HashMap<>(52);
     private BotStrategy strategy;
     private final Table table;
-    private final Scoreboard scoreboard;
 
-    public BotPlayer(BotStrategy strategy, Table table, Scoreboard scoreboard) {
+    public BotPlayer(BotStrategy strategy, Table table) {
         super();
         this.strategy = strategy;
         this.table = table;
-        this.scoreboard = scoreboard;
+    }
+
+    public BotStrategy getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(BotStrategy strategy) {
+        this.strategy = strategy;
     }
 
     public Map<Value, Integer> getSeenCardsFrequency() {
         return seenCardsFrequency;
     }
 
-    public void switchStrategy() {
+    public BotStrategy switchStrategy() {
         if (this.strategy instanceof OffensiveStrategy) {
             this.strategy = new UsualStrategy();
         } else {
             this.strategy = new OffensiveStrategy();
         }
+        return this.strategy;
     }
 
     public void rememberCard(Card card) {

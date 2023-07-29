@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 public class Deck {
 
+    public static final int TOTAL_CARDS = 52;
     private final LinkedList<Card> cards = new LinkedList<>();
 
     public Deck() {

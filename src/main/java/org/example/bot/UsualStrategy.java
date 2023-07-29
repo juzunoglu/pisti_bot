@@ -32,7 +32,7 @@ public class UsualStrategy extends CommonStrategy {
                 .boxed()
                 .sorted(Collections.reverseOrder())
                 .flatMap(i -> bot.getHand().stream()
-                        .filter(card -> !isJack(card)) // Do not consider "J" in this strategy
+                        .filter(card -> !isCardJack(card)) // Do not consider "J" in this strategy
                         .filter(card -> Objects.equals(seenCardsFrequency.getOrDefault(card.getValue(), 0), i)))
                 .findFirst();
     }
@@ -46,8 +46,12 @@ public class UsualStrategy extends CommonStrategy {
         return table.getCurrentPile().size() > PILE_THRESHOLD;
     }
 
-    private boolean isJack(Card card) {
+    private boolean isCardJack(Card card) {
         return card.getValue() == Value.JACK;
     }
 
+    @Override
+    public String toString() {
+        return "UsualStrategy";
+    }
 }

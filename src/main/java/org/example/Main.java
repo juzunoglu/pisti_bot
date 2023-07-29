@@ -17,8 +17,8 @@ public class Main {
         Deck deck = new Deck();
         var human = new HumanPlayer(scanner);
         Table table = new Table();
-        Scoreboard scoreboard = new Scoreboard();
-        var bot = new BotPlayer(new UsualStrategy(), table, scoreboard);
+        var bot = new BotPlayer(new UsualStrategy(), table);
+        Scoreboard scoreboard = new Scoreboard(human, bot);
 
         Dealer dealer = new Dealer(deck);
         return new Game(human, bot, dealer, table, scoreboard);

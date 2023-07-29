@@ -8,4 +8,8 @@ public class OffensiveStrategy extends CommonStrategy {
     public Card chooseCard(BotPlayer bot, Table table) {
         return null;
     }
+    @Override
+    public String toString() {
+        return "OffensiveStrategy";
+    }
 }

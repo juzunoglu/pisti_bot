@@ -1,6 +1,10 @@
 package org.example;
 
 import org.example.bot.BotPlayer;
+import org.example.bot.BotStrategy;
+import org.example.bot.UsualStrategy;
+
+import java.util.Map;
 
 public class Game {
 
@@ -59,10 +63,23 @@ public class Game {
         if (botPlayer.isHandEmpty()) {
             dealer.dealCardsToPlayer(botPlayer);
         }
-
+        considerStrategyChange();
         Card playedCard = botPlayer.playCard();
 
         resolveTurn(botPlayer, playedCard);
+    }
+
+    private void considerStrategyChange() {
+        System.out.println("Considering strategy change. Current strategy: " + botPlayer.getStrategy());
+        Map<Player, Integer> currentScores = scoreboard.getScores();
+        int botScore = currentScores.get(botPlayer);
+        int humanScore = currentScores.get(humanPlayer);
+        int deckSize = dealer.deck().getCards().size();
+
+        if (botScore < humanScore && deckSize <= Deck.TOTAL_CARDS / 2) {
+            BotStrategy strategy = botPlayer.switchStrategy();
+            System.out.println("Bot strategy changed to: " + strategy);
+        }
     }
 
     // todo: make this more readable.

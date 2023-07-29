@@ -8,7 +8,6 @@ public class Table {
     private final LinkedList<Card> faceDownCards = new LinkedList<>();
     private final LinkedList<Card> faceUpCards = new LinkedList<>();
 
-
     public LinkedList<Card> getFaceDownCards() {
         return faceDownCards;
     }
