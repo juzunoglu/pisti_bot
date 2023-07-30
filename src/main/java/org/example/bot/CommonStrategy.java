@@ -19,7 +19,6 @@ public abstract class CommonStrategy implements BotStrategy {
         return Optional.empty();
     }
 
-
     @Override
     public abstract Card chooseCard(BotPlayer bot, Table table);
 }

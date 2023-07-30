@@ -2,19 +2,16 @@ package org.example;
 
 import org.example.bot.BotPlayer;
 import org.example.bot.BotStrategy;
-import org.example.bot.UsualStrategy;
 
 import java.util.Map;
 
 public class Game {
-
     public static final int NORMAL_PISTI_SCORE = 10;
     public static final int PISTI_WITH_JACK_SCORE = 20;
     private final HumanPlayer humanPlayer;
     private final BotPlayer botPlayer;
     private final Table table;
     private final Dealer dealer;
-
     private final Scoreboard scoreboard;
 
     public Game(HumanPlayer humanPlayer, BotPlayer botPlayer, Dealer dealer,
@@ -28,17 +25,16 @@ public class Game {
 
     public void start() {
         dealer.dealInitialCards(humanPlayer, botPlayer, table);
-
+        botPlayer.rememberCard(table.getPileTopCard().get());
         // todo: should be parametric as to who goes first.
         while (gameInProgress()) {
             playTurnHuman();
-            if (gameOver()) break;
+            if (gameOver()) break;;
             playTurnBot();
         }
         assignExtraPointsForMostGainedCards();
         determineWinner();
     }
-
 
     private void playTurnHuman() {
 
