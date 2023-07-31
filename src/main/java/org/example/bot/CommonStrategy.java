@@ -25,7 +25,7 @@ public abstract class CommonStrategy implements BotStrategy {
 
     protected Optional<Card> chooseMostFrequentCardInHand(BotPlayer bot) {
         Map<Value, Long> cardFrequencies = bot.getHand().stream()
-                .filter(card -> card.getValue() != Value.JACK) // Exclude JACK cards from the frequency map
+                .filter(card -> !isCardJack(card)) // Exclude JACK cards from the frequency map
                 .collect(Collectors.groupingBy(Card::getValue, Collectors.counting()));
 
         return cardFrequencies.entrySet().stream()
