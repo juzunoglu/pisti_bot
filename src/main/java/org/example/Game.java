@@ -2,8 +2,10 @@ package org.example;
 
 import org.example.bot.BotPlayer;
 import org.example.bot.BotStrategy;
+import org.example.bot.PistiTypes;
 
 import java.util.Map;
+import java.util.Scanner;
 
 public class Game {
     public static final int NORMAL_PISTI_SCORE = 10;
@@ -13,28 +15,60 @@ public class Game {
     private final Table table;
     private final Dealer dealer;
     private final Scoreboard scoreboard;
+    private final Scanner scanner;
+    private Player firstPlayer;
 
     public Game(HumanPlayer humanPlayer, BotPlayer botPlayer, Dealer dealer,
-                Table table, Scoreboard scoreboard) {
+                Table table, Scoreboard scoreboard, Scanner scanner) {
         this.humanPlayer = humanPlayer;
         this.botPlayer = botPlayer;
         this.dealer = dealer;
         this.table = table;
         this.scoreboard = scoreboard;
+        this.scanner = scanner;
     }
 
     public void start() {
+        chooseFirstPlayer(scanner);
         dealer.dealInitialCards(humanPlayer, botPlayer, table);
         botPlayer.rememberCard(table.getPileTopCard().get());
-        // todo: should be parametric as to who goes first.
+
         while (gameInProgress()) {
-            playTurnHuman();
-            if (gameOver()) break;;
-            playTurnBot();
+            logCurrentScore();
+            if (firstPlayer == humanPlayer) {
+                playTurnHuman();
+                if (gameOver()) break;
+                playTurnBot();
+            } else {
+                playTurnBot();
+                if (gameOver()) break;
+                playTurnHuman();
+            }
         }
         assignExtraPointsForMostGainedCards();
         determineWinner();
     }
+
+    private void logCurrentScore() {
+        System.out.println(scoreboard.getScores());
+    }
+
+    private void chooseFirstPlayer(Scanner scanner) {
+        System.out.println("Who should go first? Enter '1' for Human or '2' for Bot.");
+        String input = scanner.nextLine();
+        while (!input.equals("1") && !input.equals("2")) {
+            System.out.println("Invalid input. Please enter '1' for Human or '2' for Bot.");
+            input = scanner.nextLine();
+        }
+        if (input.equals("1")) {
+            firstPlayer = humanPlayer;
+            System.out.println("Human player goes first.");
+        } else {
+            firstPlayer = botPlayer;
+            System.out.println("Bot player goes first.");
+        }
+    }
+
 
     private void playTurnHuman() {
 
@@ -78,7 +112,6 @@ public class Game {
         }
     }
 
-    // todo: make this more readable.
     private void resolveTurn(Player player, Card playedCard) {
         botPlayer.rememberCard(playedCard);
         botPlayer.logSeenCards();
@@ -86,10 +119,11 @@ public class Game {
         if (isTableEmpty()) {
             table.addCardFaceUp(playedCard);
         } else if (isMatchingCard(playedCard) || isJack(playedCard)) {
+            checkAndHandlePisti(player, playedCard);
+            table.addCardFaceUp(playedCard);
             player.addGainedCards(table.getCurrentPile());
             int pointsFromCards = player.getPointsFromCards(table.getCurrentPile());
             scoreboard.addScore(player, pointsFromCards);
-            checkAndHandlePisti(player, playedCard);
             table.removeAllCards();
         } else {
             table.addCardFaceUp(playedCard);
@@ -111,12 +145,14 @@ public class Game {
     private void checkAndHandlePisti(Player player, Card playedCard) {
         if (table.getCurrentPile().size() == 1 && !isJack(playedCard) && !isJack(table.getPileTopCard().get())) {
             scoreboard.addScore(player, NORMAL_PISTI_SCORE);
-            System.out.println("***Pişti!*** Player " + player + " took the pile and scored extra points!");
+            scoreboard.addPisti(player, PistiTypes.NORMAL_PISTI);
+            System.out.println("***Pişti!*** Player took the pile and scored extra points!");
         } else if (table.getCurrentPile().size() == 1 && isJack(playedCard) && isJack(table.getPileTopCard().get())) {
             scoreboard.addScore(player, PISTI_WITH_JACK_SCORE);
-            System.out.println("***Pişti!*** Player " + player + " took the pile with a Jack and scored extra points!");
+            scoreboard.addPisti(player, PistiTypes.JACK_PISTI);
+            System.out.println("***Pişti!*** Player took the pile with a Jack and scored extra points!");
         } else {
-            System.out.println("Player " + player + " took the pile without a pişti!");
+            System.out.println("Player took the pile without a pişti!");
         }
     }
 

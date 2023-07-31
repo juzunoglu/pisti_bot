@@ -8,7 +8,6 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Game game = initializeGameState();
-
         game.start();
     }
 
@@ -21,6 +20,6 @@ public class Main {
         Scoreboard scoreboard = new Scoreboard(human, bot);
 
         Dealer dealer = new Dealer(deck);
-        return new Game(human, bot, dealer, table, scoreboard);
+        return new Game(human, bot, dealer, table, scoreboard, scanner);
     }
 }

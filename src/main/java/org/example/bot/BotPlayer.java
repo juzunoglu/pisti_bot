@@ -54,6 +54,7 @@ public class BotPlayer extends Player {
     public Optional<Card> getJackInHand() {
         return this.getHand().stream()
                 .filter(card -> card.getValue() == Value.JACK)
+                .peek(it -> System.out.println("Bot played jack decisively"))
                 .findFirst();
     }
 
