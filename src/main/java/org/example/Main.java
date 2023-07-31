@@ -1,7 +1,7 @@
 package org.example;
 
 import org.example.bot.BotPlayer;
-import org.example.bot.UsualStrategy;
+import org.example.bot.SafeStrategy;
 import org.example.gameloop.*;
 import org.example.player.HumanPlayer;
 
@@ -13,12 +13,12 @@ public class Main {
         game.start();
     }
 
-    private static Game initializeGameState() {
+    public static Game initializeGameState() {
         Scanner scanner = new Scanner(System.in);
         Deck deck = new Deck();
         var human = new HumanPlayer(scanner);
         Table table = new Table();
-        var bot = new BotPlayer(new UsualStrategy(), table);
+        var bot = new BotPlayer(new SafeStrategy(), table);
         Scoreboard scoreboard = new Scoreboard(human, bot);
 
         Dealer dealer = new Dealer(deck);

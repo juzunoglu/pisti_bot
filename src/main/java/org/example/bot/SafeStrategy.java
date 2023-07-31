@@ -5,7 +5,7 @@ import org.example.gameloop.Table;
 
 import java.util.*;
 
-public class UsualStrategy extends CommonStrategy {
+public class SafeStrategy extends CommonStrategy {
     private static final int PILE_COUNT_THRESHOLD = 5;
     private static final int PILE_VALUE_THRESHOLD = 2;
 
