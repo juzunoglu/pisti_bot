@@ -1,7 +1,6 @@
 package org.example.gameloop;
 
 import org.example.bot.BotPlayer;
-import org.example.enums.Value;
 import org.example.player.HumanPlayer;
 import org.example.player.Player;
 
@@ -19,13 +18,7 @@ public record Dealer(Deck deck) {
             table.addCardFaceDown(deck.draw());
         }
 
-        // Draw a face-up card that isn't a JACK
-        Card faceUpCard;
-        do {
-            faceUpCard = deck.draw();
-        } while (faceUpCard.getValue() == Value.JACK);
-
-        table.addCardFaceUp(faceUpCard);
+        table.addCardFaceUp(deck.draw());
     }
 
     public void dealCardsToPlayer(Player player) {
