@@ -10,6 +10,7 @@ public class OffensiveStrategy extends CommonStrategy {
     @Override
     public Card chooseCard(BotPlayer bot, Table table) {
         return chooseMatchingCard(bot, table)
+                .or(() -> chooseJack(bot, table))
                 .or(() -> chooseCardByFrequency(bot))
                 .or(() -> chooseMostFrequentCardInHand(bot))
                 .orElseGet(() -> chooseRandomCard(bot, table));
