@@ -1,7 +1,7 @@
 package org.example.bot;
 
-import org.example.Card;
-import org.example.Table;
+import org.example.gameloop.Card;
+import org.example.gameloop.Table;
 
 public class OffensiveStrategy extends CommonStrategy {
     @Override

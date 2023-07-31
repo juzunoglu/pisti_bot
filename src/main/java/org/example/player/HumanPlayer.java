@@ -1,4 +1,6 @@
-package org.example;
+package org.example.player;
+
+import org.example.gameloop.Card;
 
 import java.util.Scanner;
 

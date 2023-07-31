@@ -1,8 +1,8 @@
 package org.example.bot;
 
-import org.example.Card;
-import org.example.Table;
-import org.example.Value;
+import org.example.gameloop.Card;
+import org.example.gameloop.Table;
+import org.example.enums.Value;
 
 import java.util.*;
 import java.util.stream.Collectors;

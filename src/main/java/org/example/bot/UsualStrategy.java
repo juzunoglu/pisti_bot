@@ -1,11 +1,9 @@
 package org.example.bot;
 
-import org.example.Card;
-import org.example.Table;
-import org.example.Value;
+import org.example.gameloop.Card;
+import org.example.gameloop.Table;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class UsualStrategy extends CommonStrategy {
     private static final int PILE_THRESHOLD = 5;

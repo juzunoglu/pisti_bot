@@ -1,6 +1,9 @@
 package org.example.bot;
 
-import org.example.*;
+import org.example.enums.Value;
+import org.example.gameloop.Card;
+import org.example.gameloop.Table;
+import org.example.player.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +23,6 @@ public class BotPlayer extends Player {
 
     public BotStrategy getStrategy() {
         return strategy;
-    }
-
-    public void setStrategy(BotStrategy strategy) {
-        this.strategy = strategy;
     }
 
     public Map<Value, Integer> getSeenCardsFrequency() {

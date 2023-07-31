@@ -1,4 +1,4 @@
-package org.example;
+package org.example.gameloop;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,10 +7,6 @@ import java.util.Optional;
 public class Table {
     private final LinkedList<Card> faceDownCards = new LinkedList<>();
     private final LinkedList<Card> faceUpCards = new LinkedList<>();
-
-    public LinkedList<Card> getFaceDownCards() {
-        return faceDownCards;
-    }
 
     public LinkedList<Card> getFaceUpCards() {
         return faceUpCards;

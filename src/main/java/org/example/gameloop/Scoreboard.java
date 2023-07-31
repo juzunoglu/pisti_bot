@@ -1,7 +1,9 @@
-package org.example;
+package org.example.gameloop;
 
 import org.example.bot.BotPlayer;
-import org.example.bot.PistiTypes;
+import org.example.enums.PistiTypes;
+import org.example.player.HumanPlayer;
+import org.example.player.Player;
 
 import java.util.Collections;
 import java.util.HashMap;

@@ -1,4 +1,7 @@
-package org.example;
+package org.example.gameloop;
+
+import org.example.enums.Suit;
+import org.example.enums.Value;
 
 public class Card {
 

@@ -1,6 +1,6 @@
-package org.example;
+package org.example.gameloop;
 
-import org.example.bot.PistiTypes;
+import org.example.enums.PistiTypes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,10 +17,6 @@ public class PistiCounter {
 
     public void incrementPistiCount(PistiTypes type) {
         this.counts.put(type, this.counts.get(type) + 1);
-    }
-
-    public int getPistiCount(PistiTypes type) {
-        return this.counts.get(type);
     }
 
     @Override

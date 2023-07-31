@@ -1,4 +1,4 @@
-package org.example.bot;
+package org.example.enums;
 
 public enum PistiTypes {
     NORMAL_PISTI,

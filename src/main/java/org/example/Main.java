@@ -2,6 +2,8 @@ package org.example;
 
 import org.example.bot.BotPlayer;
 import org.example.bot.UsualStrategy;
+import org.example.gameloop.*;
+import org.example.player.HumanPlayer;
 
 import java.util.Scanner;
 

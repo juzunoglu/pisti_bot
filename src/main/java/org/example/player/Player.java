@@ -1,4 +1,6 @@
-package org.example;
+package org.example.player;
+
+import org.example.gameloop.Card;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +35,7 @@ public abstract class Player {
     }
 
 
-    protected int getPointsFromCards(List<Card> gainedCards) {
+    public int getPointsFromCards(List<Card> gainedCards) {
         return gainedCards.stream()
                 .mapToInt(Card::getPoints)
                 .sum();

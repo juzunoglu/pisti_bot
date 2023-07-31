@@ -1,6 +1,8 @@
-package org.example;
+package org.example.gameloop;
 
 import org.example.bot.BotPlayer;
+import org.example.player.HumanPlayer;
+import org.example.player.Player;
 
 public record Dealer(Deck deck) {
 
