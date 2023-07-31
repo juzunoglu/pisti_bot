@@ -21,7 +21,7 @@ public abstract class CommonStrategy implements BotStrategy {
 
     protected Optional<Card> chooseMostFrequentCardInHand(BotPlayer bot) {
         Map<Value, Long> cardFrequencies = bot.getHand().stream()
-                .filter(card -> !isCardJack(card)) // Exclude JACK cards from the frequency map
+                .filter(this::excludeJack)
                 .collect(Collectors.groupingBy(Card::getValue, Collectors.counting()));
 
         return cardFrequencies.entrySet().stream()
@@ -38,19 +38,19 @@ public abstract class CommonStrategy implements BotStrategy {
                 .boxed()
                 .sorted(Collections.reverseOrder())
                 .flatMap(i -> bot.getHand().stream()
-                        .filter(card -> !isCardJack(card)) // Do not consider "J" in this strategy
+                        .filter(this::excludeJack) // Do not consider "J" in this strategy
                         .filter(card -> Objects.equals(seenCardsFrequency.getOrDefault(card.getValue(), 0), i)))
                 .peek(it -> System.out.println("Bot has played the card based on the frequency map"))
                 .findFirst();
     }
 
-    public boolean isCardJack(Card card) {
-        return card.getValue() == Value.JACK;
+    public boolean excludeJack(Card card) {
+        return card.getValue() != Value.JACK;
     }
 
     protected Card chooseRandomCard(BotPlayer bot, Table table) {
         System.out.println("Bot played card randomly");
-        List<Card> handWithoutJack = bot.getHand().stream().filter(card -> !isCardJack(card)).toList();
+        List<Card> handWithoutJack = bot.getHand().stream().filter(this::excludeJack).toList();
         if (table.getCurrentPile().isEmpty() && !handWithoutJack.isEmpty()) {
             // If the table is empty and there are other cards besides Jack, pick one of them randomly
             return handWithoutJack.get(new Random().nextInt(handWithoutJack.size()));
