@@ -6,6 +6,7 @@ import org.example.gameloop.Table;
 import org.example.player.Player;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 
@@ -41,6 +42,12 @@ public class BotPlayer extends Player {
     public void rememberCard(Card card) {
         seenCardsFrequency.put(card.getValue(), seenCardsFrequency.getOrDefault(card.getValue(), 0) + 1);
     }
+    public void rememberCards(LinkedList<Card> cards) {
+        for (Card card : cards) {
+            rememberCard(card);
+        }
+    }
+
 
     private Card chooseCard() {
         return strategy.chooseCard(this, table);

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class OffensiveStrategy extends CommonStrategy {
 
-    private static final double JACK_THRESHOLD = 15.0;
+    private static final double JACK_THRESHOLD = 10.0;
 
     @Override
     public Card chooseCard(BotPlayer bot, Table table) {
@@ -48,7 +48,7 @@ public class OffensiveStrategy extends CommonStrategy {
 
     private boolean shouldPlayJack(BotPlayer bot, Table table) {
         double probabilitySum = 0.0;
-        double combinedProbabilityResult = 0.0;
+        double combinedProbabilityResult;
         double unseenCardNum = 52 - (table.getFaceDownCards().size() + table.getFaceUpCards().size());
         List<Card> handWithoutJack = bot.getHand()
                 .stream()

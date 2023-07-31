@@ -12,10 +12,10 @@ public class Card {
     public Card(Suit suit, Value value) {
         this.suit = suit;
         this.value = value;
-        this.points = calculateCardPoint(suit, value);
+        this.points = calculateCardPoint();
     }
 
-    private int calculateCardPoint(Suit suit, Value value) {
+    public int calculateCardPoint() {
         if (suit == Suit.DIAMONDS && value == Value.TEN) {
             return 3;
         } else if (suit == Suit.CLUBS && value == Value.TWO) {

@@ -10,6 +10,13 @@ import java.util.stream.IntStream;
 
 public abstract class CommonStrategy implements BotStrategy {
 
+    @Override
+    public abstract Optional<Card> chooseJack(BotPlayer bot, Table table);
+
+    @Override
+    public abstract Card chooseCard(BotPlayer bot, Table table);
+
+
     protected Optional<Card> chooseMatchingCard(BotPlayer bot, Table table) {
         Optional<Card> topPileCard = table.getPileTopCard();
         return topPileCard.flatMap(
@@ -24,13 +31,26 @@ public abstract class CommonStrategy implements BotStrategy {
                 .filter(this::excludeJack)
                 .collect(Collectors.groupingBy(Card::getValue, Collectors.counting()));
 
-        return cardFrequencies.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .flatMap(maxEntry -> bot.getHand().stream()
-                        .filter(card -> card.getValue() == maxEntry.getKey())
+        Optional<Map.Entry<Value, Long>> maxEntryOpt = cardFrequencies.entrySet().stream()
+                .max(Map.Entry.comparingByValue());
+
+        if (maxEntryOpt.isPresent()) {
+            long maxFrequency = maxEntryOpt.get().getValue();
+            boolean allSameFrequency = cardFrequencies.values().stream()
+                    .allMatch(freq -> freq == maxFrequency);
+
+            if (!allSameFrequency) {
+                Value maxValue = maxEntryOpt.get().getKey();
+                return bot.getHand().stream()
+                        .filter(card -> card.getValue() == maxValue)
                         .peek(it -> System.out.println("Bot choose the card in its hand frequency map"))
-                        .findFirst());
+                        .findFirst();
+            }
+        }
+
+        return Optional.empty();
     }
+
 
     protected Optional<Card> chooseCardByFrequency(BotPlayer bot) {
         Map<Value, Integer> seenCardsFrequency = bot.getSeenCardsFrequency();
@@ -50,7 +70,10 @@ public abstract class CommonStrategy implements BotStrategy {
 
     protected Card chooseRandomCard(BotPlayer bot, Table table) {
         System.out.println("Bot played card randomly");
-        List<Card> handWithoutJack = bot.getHand().stream().filter(this::excludeJack).toList();
+        List<Card> handWithoutJack = bot.getHand()
+                .stream()
+                .filter(this::excludeJack)
+                .toList();
         if (table.getCurrentPile().isEmpty() && !handWithoutJack.isEmpty()) {
             // If the table is empty and there are other cards besides Jack, pick one of them randomly
             return handWithoutJack.get(new Random().nextInt(handWithoutJack.size()));
@@ -58,8 +81,4 @@ public abstract class CommonStrategy implements BotStrategy {
         // Otherwise, pick any card randomly
         return bot.getHand().get(new Random().nextInt(bot.getHand().size()));
     }
-
-
-    @Override
-    public abstract Card chooseCard(BotPlayer bot, Table table);
 }

@@ -21,6 +21,10 @@ public class Game {
     private final Scanner scanner;
     private Player firstPlayer;
 
+    private Player firstPileRoundWinner = null;
+    private Player lastCapturePlayer;
+
+
     public Game(HumanPlayer humanPlayer, BotPlayer botPlayer, Dealer dealer,
                 Table table, Scoreboard scoreboard, Scanner scanner) {
         this.humanPlayer = humanPlayer;
@@ -49,6 +53,7 @@ public class Game {
                 playTurnHuman();
             }
         }
+        assignRemainingCards();
         assignExtraPointsForMostGainedCards();
         determineWinner();
     }
@@ -88,6 +93,7 @@ public class Game {
         Card playedCard = humanPlayer.playCard();
 
         resolveTurn(humanPlayer, playedCard);
+
     }
 
     private void playTurnBot() {
@@ -102,6 +108,21 @@ public class Game {
 
         resolveTurn(botPlayer, playedCard);
     }
+
+    private void capturePile(Player player) {
+        if (firstPileRoundWinner == null) {
+            firstPileRoundWinner = player;
+            if (player instanceof BotPlayer) {
+                System.out.println("First pile goes to the bot. So he remembers the face-down cards");
+                ((BotPlayer) player).rememberCards(table.getFaceDownCards());
+            }
+        }
+        lastCapturePlayer = player;
+        player.addGainedCards(table.getCurrentPile());
+        scoreboard.addScore(player, player.getPointsFromCards(table.getCurrentPile()));
+        table.removeAllCards();
+    }
+
 
     private void considerStrategyChange() {
         System.out.println("Considering strategy change. Current strategy: " + botPlayer.getStrategy());
@@ -118,21 +139,30 @@ public class Game {
 
     private void resolveTurn(Player player, Card playedCard) {
         botPlayer.rememberCard(playedCard);
-        botPlayer.logSeenCards();
 
         if (isTableEmpty()) {
             table.addCardFaceUp(playedCard);
         } else if (isMatchingCard(playedCard) || isJack(playedCard)) {
             checkAndHandlePisti(player, playedCard);
             table.addCardFaceUp(playedCard);
-            player.addGainedCards(table.getCurrentPile());
-            int pointsFromCards = player.getPointsFromCards(table.getCurrentPile());
-            scoreboard.addScore(player, pointsFromCards);
-            table.removeAllCards();
+            capturePile(player);
         } else {
             table.addCardFaceUp(playedCard);
         }
+
+        botPlayer.logSeenCards();
     }
+
+    private void assignRemainingCards() {
+        if (lastCapturePlayer != null && !table.getFaceUpCards().isEmpty()) {
+            lastCapturePlayer.addGainedCards(table.getCurrentPile());
+            int pointsFromCards = lastCapturePlayer.getPointsFromCards(table.getCurrentPile());
+            scoreboard.addScore(lastCapturePlayer, pointsFromCards);
+            System.out.println("Remained cards" + table.getCurrentPile() + "goes to " + lastCapturePlayer);
+            table.removeAllCards();
+        }
+    }
+
 
     private boolean isTableEmpty() {
         return table.getFaceUpCards().isEmpty();
