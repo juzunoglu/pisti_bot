@@ -12,15 +12,11 @@ public abstract class CommonStrategy implements BotStrategy {
 
     protected Optional<Card> chooseMatchingCard(BotPlayer bot, Table table) {
         Optional<Card> topPileCard = table.getPileTopCard();
-        if (topPileCard.isPresent()) {
-            for (Card cardInHand : bot.getHand()) {
-                if (cardInHand.getValue() == topPileCard.get().getValue()) {
-                    System.out.println("Bot has played a matching card");
-                    return Optional.of(cardInHand);
-                }
-            }
-        }
-        return Optional.empty();
+        return topPileCard.flatMap(
+                card -> bot.getHand().stream()
+                        .filter(cardInHand -> cardInHand.getValue() == card.getValue())
+                        .peek(c -> System.out.println("Bot has played a matching card"))
+                        .findFirst());
     }
 
     protected Optional<Card> chooseMostFrequentCardInHand(BotPlayer bot) {
