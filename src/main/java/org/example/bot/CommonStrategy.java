@@ -44,7 +44,7 @@ public abstract class CommonStrategy implements BotStrategy {
                 .findFirst();
     }
 
-    private boolean excludeJack(Card card) {
+    protected boolean excludeJack(Card card) {
         return card.getValue() != Value.JACK;
     }
 

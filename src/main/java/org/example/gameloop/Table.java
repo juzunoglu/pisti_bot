@@ -12,6 +12,10 @@ public class Table {
         return faceUpCards;
     }
 
+    public LinkedList<Card> getFaceDownCards() {
+        return faceDownCards;
+    }
+
     public void addCardFaceDown(Card card) {
         faceDownCards.add(card);
     }
