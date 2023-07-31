@@ -32,7 +32,7 @@ public class BotPlayer extends Player {
 
     public BotStrategy switchStrategy() {
         if (this.strategy instanceof OffensiveStrategy) {
-            this.strategy = new UsualStrategy();
+            this.strategy = new SafeStrategy();
         } else {
             this.strategy = new OffensiveStrategy();
         }

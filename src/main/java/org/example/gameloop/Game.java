@@ -4,7 +4,6 @@ import org.example.bot.BotPlayer;
 import org.example.bot.BotStrategy;
 import org.example.enums.PistiTypes;
 import org.example.enums.Value;
-import org.example.player.HumanPlayer;
 import org.example.player.Player;
 
 import java.util.Map;
@@ -13,31 +12,39 @@ import java.util.Scanner;
 public class Game {
     public static final int NORMAL_PISTI_SCORE = 10;
     public static final int PISTI_WITH_JACK_SCORE = 20;
-    private final HumanPlayer humanPlayer;
+    private final BotPlayer humanPlayer;
     private final BotPlayer botPlayer;
     private final Table table;
     private final Dealer dealer;
     private final Scoreboard scoreboard;
-    private final Scanner scanner;
+//    private final Scanner scanner;
     private Player firstPlayer;
 
     private Player firstPileRoundWinner = null;
     private Player lastCapturePlayer;
 
 
-    public Game(HumanPlayer humanPlayer, BotPlayer botPlayer, Dealer dealer,
+    public Game(Player humanPlayer, Player botPlayer, Dealer dealer,
                 Table table, Scoreboard scoreboard, Scanner scanner) {
-        this.humanPlayer = humanPlayer;
-        this.botPlayer = botPlayer;
+        this.humanPlayer = (BotPlayer) humanPlayer;
+        this.botPlayer = (BotPlayer) botPlayer;
         this.dealer = dealer;
         this.table = table;
         this.scoreboard = scoreboard;
-        this.scanner = scanner;
+//        this.scanner = scanner;
+    }
+
+    public Game(BotPlayer humanPlayer, BotPlayer botPlayer, Table table, Dealer dealer, Scoreboard scoreboard) {
+        this.humanPlayer = humanPlayer;
+        this.botPlayer = botPlayer;
+        this.table = table;
+        this.dealer = dealer;
+        this.scoreboard = scoreboard;
     }
 
     // todo: Bot should be able to see the cards if he wins the faceDownCards from the pil
     public void start() {
-        chooseFirstPlayer(scanner);
+//        chooseFirstPlayer(scanner);
         dealer.dealInitialCards(humanPlayer, botPlayer, table);
         botPlayer.rememberCard(table.getPileTopCard().get());
 
@@ -103,7 +110,10 @@ public class Game {
         if (botPlayer.isHandEmpty()) {
             dealer.dealCardsToPlayer(botPlayer);
         }
-        considerStrategyChange();
+
+        dealer.logDeckSize();
+
+//        considerStrategyChange();
         Card playedCard = botPlayer.playCard();
 
         resolveTurn(botPlayer, playedCard);

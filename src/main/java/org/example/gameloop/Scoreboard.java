@@ -1,8 +1,6 @@
 package org.example.gameloop;
 
-import org.example.bot.BotPlayer;
 import org.example.enums.PistiTypes;
-import org.example.player.HumanPlayer;
 import org.example.player.Player;
 
 import java.util.Collections;
@@ -14,7 +12,7 @@ public class Scoreboard {
     private final Map<Player, PistiCounter> pistiCounts;
 
 
-    public Scoreboard(HumanPlayer humanPlayer, BotPlayer bot) {
+    public Scoreboard(Player humanPlayer, Player bot) {
         this.scores = new HashMap<>();
         this.scores.put(humanPlayer, 0);
         this.scores.put(bot, 0);

@@ -21,8 +21,14 @@ public class Deck {
     }
 
     public Card draw() {
-        return cards.pop();
+        if (cards.isEmpty()) {
+            System.out.println("No more cards to draw");
+            return null;
+        } else {
+            return cards.pop();
+        }
     }
+
 
     public LinkedList<Card> getCards() {
         return cards;

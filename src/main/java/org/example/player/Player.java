@@ -7,6 +7,7 @@ import java.util.List;
 
 public abstract class Player {
 
+    protected String name;
     protected List<Card> hand;
     protected List<Card> gainedCards;
     public Player() {
