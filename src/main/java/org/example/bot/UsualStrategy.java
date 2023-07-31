@@ -10,14 +10,14 @@ public class UsualStrategy extends CommonStrategy {
 
     @Override
     public Card chooseCard(BotPlayer bot, Table table) {
-        return getMatchingCard(bot, table)
-                .or(() -> playJackIfAppropriate(bot, table))
+        return chooseMatchingCard(bot, table)
+                .or(() -> chooseJack(bot, table))
                 .or(() -> chooseCardByFrequency(bot))
                 .or(() -> chooseMostFrequentCardInHand(bot))
-                .orElseGet(() -> playRandomCard(bot, table));
+                .orElseGet(() -> chooseRandomCard(bot, table));
     }
 
-    private Optional<Card> playJackIfAppropriate(BotPlayer bot, Table table) {
+    private Optional<Card> chooseJack(BotPlayer bot, Table table) {
         if (shouldPlayJack(table)) {
             return bot.getJackInHand();
         }

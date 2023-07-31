@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 
 public abstract class CommonStrategy implements BotStrategy {
 
-    protected Optional<Card> getMatchingCard(BotPlayer bot, Table table) {
+    protected Optional<Card> chooseMatchingCard(BotPlayer bot, Table table) {
         Optional<Card> topPileCard = table.getPileTopCard();
         if (topPileCard.isPresent()) {
             for (Card cardInHand : bot.getHand()) {
@@ -52,7 +52,7 @@ public abstract class CommonStrategy implements BotStrategy {
         return card.getValue() == Value.JACK;
     }
 
-    protected Card playRandomCard(BotPlayer bot, Table table) {
+    protected Card chooseRandomCard(BotPlayer bot, Table table) {
         System.out.println("Bot played card randomly");
         List<Card> handWithoutJack = bot.getHand().stream().filter(card -> !isCardJack(card)).toList();
         if (table.getCurrentPile().isEmpty() && !handWithoutJack.isEmpty()) {

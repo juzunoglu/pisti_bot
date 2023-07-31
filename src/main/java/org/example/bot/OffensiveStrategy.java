@@ -6,10 +6,10 @@ import org.example.gameloop.Table;
 public class OffensiveStrategy extends CommonStrategy {
     @Override
     public Card chooseCard(BotPlayer bot, Table table) {
-        return getMatchingCard(bot, table)
+        return chooseMatchingCard(bot, table)
                 .or(() -> chooseCardByFrequency(bot))
                 .or(() -> chooseMostFrequentCardInHand(bot))
-                .orElseGet(() -> playRandomCard(bot, table));
+                .orElseGet(() -> chooseRandomCard(bot, table));
     }
 
     @Override
