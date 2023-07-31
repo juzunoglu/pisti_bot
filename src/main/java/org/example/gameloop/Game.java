@@ -31,6 +31,7 @@ public class Game {
         this.scanner = scanner;
     }
 
+    // todo: Bot should be able to see the cards if he wins the faceDownCards from the pile.
     public void start() {
         chooseFirstPlayer(scanner);
         dealer.dealInitialCards(humanPlayer, botPlayer, table);
