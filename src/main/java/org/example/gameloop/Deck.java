@@ -9,6 +9,7 @@ import java.util.LinkedList;
 public class Deck {
 
     public static final int TOTAL_CARDS = 52;
+    public static final int TOTAL_SAME_VALUE_CARDS = 4;
     private final LinkedList<Card> cards = new LinkedList<>();
 
     public Deck() {

@@ -4,14 +4,15 @@ import org.example.enums.Value;
 import org.example.gameloop.Card;
 import org.example.gameloop.Table;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
+
+import static org.example.gameloop.Deck.TOTAL_CARDS;
+import static org.example.gameloop.Deck.TOTAL_SAME_VALUE_CARDS;
 
 public class OffensiveStrategy extends CommonStrategy {
 
-    private static final double JACK_THRESHOLD = 10.0;
+    private static final double JACK_THRESHOLD = 0.1;
 
     @Override
     public Card chooseCard(BotPlayer bot, Table table) {
@@ -24,43 +25,41 @@ public class OffensiveStrategy extends CommonStrategy {
 
     @Override
     public Optional<Card> chooseJack(BotPlayer bot, Table table) {
-        if (shouldPlayJack(bot, table)) {
+        if (bot.hasMoreThanOneJack() && !table.getCurrentPile().isEmpty()) {
+            return bot.getJackInHand();
+        } else if (!bot.hasMoreThanOneJack() && shouldPlayJack(bot, table)) {
             return bot.getJackInHand();
         }
         return Optional.empty();
     }
 
-    private double calculatePistiProbability(Card card, Map<Value, Integer> cardFrequency, double unseenCardNumber) {
-        double probability = 0.0;
-        int seenCardSize = 3;
-        if (Objects.nonNull(cardFrequency.get(card.getValue()))) {
-            seenCardSize = 3 - cardFrequency.get(card.getValue());
-        }
-        if (seenCardSize >= 1.0) {
-            probability = (((double) seenCardSize / unseenCardNumber) * 100.0);
-            System.out.println("Bot is trying to decide whether a Jack should be played or not");
-            System.out.println("The card for which we are trying to calculate: " + card.getValue());
-            System.out.println("The total number unseen cards is " + unseenCardNumber);
-            System.out.println("Calculated probability is: " + probability);
-        }
-        return probability;
+
+    private boolean shouldPlayJack(BotPlayer botPlayer, Table table) {
+
+        if (table.getCurrentPile().isEmpty() && botPlayer.getHand().size() > 1)
+            return false;
+
+        Map<Value, Integer> seenCardsFrequency = botPlayer.getSeenCardsFrequency();
+        double totalPistiProbability = botPlayer.getHand().stream()
+                .mapToDouble(card -> calculatePistiProbability(seenCardsFrequency, card))
+                .sum();
+
+        return totalPistiProbability > JACK_THRESHOLD;
     }
 
-    private boolean shouldPlayJack(BotPlayer bot, Table table) {
-        double probabilitySum = 0.0;
-        double combinedProbabilityResult;
-        double unseenCardNum = 52 - (table.getFaceDownCards().size() + table.getFaceUpCards().size());
-        List<Card> handWithoutJack = bot.getHand()
+    private double calculatePistiProbability(Map<Value, Integer> seenCardsFrequency, Card card) {
+
+        int seenSameValueCards = seenCardsFrequency.getOrDefault(card.getValue(), 0);
+
+        int unseenSameValueCards = TOTAL_SAME_VALUE_CARDS - seenSameValueCards;
+
+        int unseenCards = TOTAL_CARDS - seenCardsFrequency
+                .values()
                 .stream()
-                .filter(this::excludeJack)
-                .toList();
+                .mapToInt(Integer::intValue)
+                .sum();
 
-        for (Card card : handWithoutJack) {
-            probabilitySum += calculatePistiProbability(card, bot.getSeenCardsFrequency(), unseenCardNum);
-        }
-
-        combinedProbabilityResult = probabilitySum / (double) handWithoutJack.size();
-        return combinedProbabilityResult > JACK_THRESHOLD;
+        return (double) unseenSameValueCards / unseenCards;
     }
 
 

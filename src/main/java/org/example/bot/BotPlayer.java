@@ -9,17 +9,24 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class BotPlayer extends Player {
 
     private final Map<Value, Integer> seenCardsFrequency = new HashMap<>(52);
     private BotStrategy strategy;
     private final Table table;
+    private boolean hasChangedStrategy = false;
+
 
     public BotPlayer(BotStrategy strategy, Table table) {
         super();
         this.strategy = strategy;
         this.table = table;
+    }
+
+    public boolean isHasChangedStrategy() {
+        return hasChangedStrategy;
     }
 
     public BotStrategy getStrategy() {
@@ -31,23 +38,35 @@ public class BotPlayer extends Player {
     }
 
     public BotStrategy switchStrategy() {
-        if (this.strategy instanceof OffensiveStrategy) {
-            this.strategy = new UsualStrategy();
-        } else {
-            this.strategy = new OffensiveStrategy();
+        if (!hasChangedStrategy && strategy instanceof OffensiveStrategy) {
+            strategy = new UsualStrategy();
+            hasChangedStrategy = true;
+        } else if (!hasChangedStrategy) {
+            strategy = new OffensiveStrategy();
+            hasChangedStrategy = true;
         }
-        return this.strategy;
+        return strategy;
     }
 
     public void rememberCard(Card card) {
         seenCardsFrequency.put(card.getValue(), seenCardsFrequency.getOrDefault(card.getValue(), 0) + 1);
     }
+
     public void rememberCards(LinkedList<Card> cards) {
         for (Card card : cards) {
             rememberCard(card);
         }
     }
 
+    public boolean hasMoreThanOneJack() {
+        return getHand().stream()
+                .filter(jack())
+                .count() > 1;
+    }
+
+    private static Predicate<Card> jack() {
+        return card -> card.getValue() == Value.JACK;
+    }
 
     private Card chooseCard() {
         return strategy.chooseCard(this, table);
@@ -59,7 +78,7 @@ public class BotPlayer extends Player {
 
     public Optional<Card> getJackInHand() {
         return this.getHand().stream()
-                .filter(card -> card.getValue() == Value.JACK)
+                .filter(jack())
                 .peek(it -> System.out.println("Bot played jack decisively"))
                 .findFirst();
     }

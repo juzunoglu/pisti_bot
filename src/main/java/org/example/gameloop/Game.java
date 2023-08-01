@@ -20,7 +20,6 @@ public class Game {
     private final Scoreboard scoreboard;
     private final Scanner scanner;
     private Player firstPlayer;
-
     private Player firstPileRoundWinner = null;
     private Player lastCapturePlayer;
 
@@ -35,7 +34,6 @@ public class Game {
         this.scanner = scanner;
     }
 
-    // todo: Bot should be able to see the cards if he wins the faceDownCards from the pil
     public void start() {
         chooseFirstPlayer(scanner);
         dealer.dealInitialCards(humanPlayer, botPlayer, table);
@@ -129,13 +127,13 @@ public class Game {
         Map<Player, Integer> currentScores = scoreboard.getScores();
         int botScore = currentScores.get(botPlayer);
         int humanScore = currentScores.get(humanPlayer);
-        int deckSize = dealer.deck().getCards().size();
 
-        if (botScore < humanScore && deckSize <= Deck.TOTAL_CARDS / 2) {
+        if (!botPlayer.isHasChangedStrategy() && (humanScore - botScore) > 10) {
             BotStrategy strategy = botPlayer.switchStrategy();
             System.out.println("Bot strategy changed to: " + strategy);
         }
     }
+
 
     private void resolveTurn(Player player, Card playedCard) {
         botPlayer.rememberCard(playedCard);

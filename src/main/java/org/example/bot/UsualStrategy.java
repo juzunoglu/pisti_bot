@@ -31,7 +31,6 @@ public class UsualStrategy extends CommonStrategy {
 
     private boolean shouldPlayJack(Table table) {
         int pileSize = table.getCurrentPile().size();
-
         int pileValue = table.getCurrentPile().stream()
                 .mapToInt(Card::calculateCardPoint)
                 .sum();
