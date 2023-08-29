@@ -22,6 +22,7 @@ public class Card {
             return 3;
         } else if (suit == Suit.CLUBS && value == Value.TWO) {
             return 2;
+
         } else if (value == Value.ACE || value == Value.JACK) {
             return 1;
         } else {
