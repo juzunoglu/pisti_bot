@@ -17,7 +17,7 @@ public class Card {
 
     public int calculateCardPoint() {
         if (suit == Suit.DIAMONDS && value == Value.TEN) {
-            System.out.println("Dummy");
+            System.out.println("Dumm y");
 
             return 3;
         } else if (suit == Suit.CLUBS && value == Value.TWO) {
